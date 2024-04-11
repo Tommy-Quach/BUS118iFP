@@ -1,7 +1,7 @@
 import streamlit as st
 
-st.markdown("# Main page 🎈")
-st.sidebar.markdown("# Main page 🎈")
+st.markdown("# Pothole Detection")
+st.sidebar.markdown("# Pothole Detection")
 
-message = "Welcome to the main page! 🎉\nPlease navigate the pages to explore some sample code."
+message = "Welcome to our Pothole Detection Project"
 st.write(message)
