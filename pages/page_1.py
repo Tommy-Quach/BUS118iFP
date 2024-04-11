@@ -1,35 +1,30 @@
-import os
-import openai
+﻿from openai import OpenAI
 import streamlit as st
-from openai import OpenAI
-
-
-st.markdown("# Page 1: Text Generation (Lab 2, 5, 6) ❄️")
-st.sidebar.markdown("# Page 1: Text Generation ❄️")
-
-openai.api_key = os.environ["OPENAI_API_KEY"]
+import base64
+import requests
 
 client = OpenAI()
 
+st.markdown("# Page 1 Road Status Detection")
+st.sidebar.markdown("# Page 1 Road Status Detection")
 
-# create a wrapper function
-def get_completion(prompt, model="gpt-3.5-turbo"):
-   completion = client.chat.completions.create(
-        model=model,
-        messages=[
-        {"role":"system",
-         "content": "Your job is to help me understand a concept that a 6-year-old can understand."},
-        {"role": "user",
-         "content": prompt},
-        ]
-    )
-   return completion.choices[0].message.content
+response = client.chat.completions.create(
+  model="gpt-4-turbo",
+  messages=[
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "Are there potholes?"},
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+          },
+        },
+      ],
+    }
+  ],
+  max_tokens=300,
+)
 
-# create our streamlit app
-with st.form(key = "chat"):
-    prompt = st.text_input("Enter a concept you would like me to explain: ") 
-    
-    submitted = st.form_submit_button("Submit")
-    
-    if submitted:
-        st.write(get_completion(prompt))
+print(response.choices[0])
