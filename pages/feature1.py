@@ -11,7 +11,7 @@ response = client.chat.completions.create(
     {
       "role": "user",
       "content": [
-        {"type": "text", "text": "What's in this image?"},
+        {"type": "text", "text": "Focus on the damaged roads and potholes of the image. Assess the severity of damage include size and depth."},
         {
           "type": "image_url",
           "image_url": {
