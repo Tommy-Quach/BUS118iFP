@@ -27,7 +27,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 
 
 with st.form(key = "chat"):
-    prompt = st.text_input("What would you like to know about potholes or do you have any potholes you'd like to add to the map?: ") 
+    prompt = st.text_input("What would you like to know about potholes or do you have any potholes from a news article you'd like to add to the map?: ") 
     submitted = st.form_submit_button("Submit")
     
     if submitted:
