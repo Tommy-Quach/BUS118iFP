@@ -1,12 +1,7 @@
-﻿from openai import OpenAI
-import streamlit as st
-import base64
-import requests
+from openai import OpenAI
 
 client = OpenAI()
 
-st.markdown("# Page 1 Road Status Detection")
-st.sidebar.markdown("# Page 1 Road Status Detection")
 
 response = client.chat.completions.create(
   model="gpt-4-turbo",
@@ -14,7 +9,7 @@ response = client.chat.completions.create(
     {
       "role": "user",
       "content": [
-        {"type": "text", "text": "Are there potholes?"},
+        {"type": "text", "text": "What's in this image?"},
         {
           "type": "image_url",
           "image_url": {
