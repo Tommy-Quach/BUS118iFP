@@ -22,7 +22,7 @@ def get_exif_data(image):
 def main():
     st.title("Image Uploader, Metadata Extractor & Folium Map")
 
-    uploaded_images = st.file_uploader("Choose image(s) to upload...", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
+    uploaded_images = st.file_uploader("Choose image(s) to upload...", accept_multiple_files=True, type=["jpg", "jpeg", "png", "mp4","gif","mov","avi","wmv","webm"])
 
     if uploaded_images is not None:
         for uploaded_image in uploaded_images:
