@@ -1,0 +1,72 @@
+import streamlit as st
+from PIL import Image
+from PIL.ExifTags import TAGS
+import folium
+from streamlit_folium import st_folium
+import openai
+import os
+
+# Set up the OpenAI API key securely
+# openai.api_key = os.getenv("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")
+openai.api_key = "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"
+
+def dms_to_decimal(degrees, minutes, seconds, direction):
+    decimal_degrees = degrees + (minutes / 60.0) + (seconds / 3600.0)
+    if direction in ['S', 'W']:
+        decimal_degrees = -decimal_degrees
+    return decimal_degrees
+
+def get_exif_data(image):
+    exif_data = image._getexif()
+    if exif_data:
+        exif = {TAGS[k]: v for k, v in exif_data.items() if k in TAGS and TAGS[k] != 'MakerNote'}
+        return exif
+    return None
+
+def query_openai_about_image(image_description):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0125",
+        messages=[{"role": "user", "content": f"Describe this image: {image_description}"}],
+        max_tokens=300
+    )
+    return response.choices[0].message['content']
+
+def main():
+    st.title("Image Uploader, Metadata Extractor & Folium Map with AI Insights")
+
+    uploaded_image = st.file_uploader("Choose an image to upload...", type=["jpg", "jpeg", "png"])
+    if uploaded_image is not None:
+        image = Image.open(uploaded_image)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
+
+        # Extract EXIF data
+        exif_data = get_exif_data(image)
+        if exif_data and 'GPSInfo' in exif_data:
+            gps_info = exif_data['GPSInfo']
+            if gps_info:
+                latitude = dms_to_decimal(gps_info[2][0], gps_info[2][1], gps_info[2][2], gps_info[1])
+                longitude = dms_to_decimal(gps_info[4][0], gps_info[4][1], gps_info[4][2], gps_info[3])
+                st.write(f"Approximate Location: Latitude: {latitude:.6f}, Longitude: {longitude:.6f}")
+
+                # Plotting on the map
+                m = folium.Map(location=[latitude, longitude], zoom_start=15)
+                folium.Marker([latitude, longitude], popup='Image Location').add_to(m)
+                st_folium(m, width=725, height=500)
+
+            else:
+                st.warning("GPS data not found in the image.")
+        else:
+            st.error("No EXIF data found in the image.")
+
+        # Get image description and query OpenAI
+        image_description = "An example description based on what you know or infer about the image."
+        openai_response = query_openai_about_image(image_description)
+        st.write("Insights from AI:")
+        st.write(openai_response)
+
+    st.markdown("---")
+    st.write("Disclaimer: This site may collect metadata from uploaded images, including location data.")
+    st.write("Please be cautious while uploading images containing sensitive information.")
+
+if __name__ == "__main__":
+    main()
