@@ -1,11 +1,5 @@
-# Instructions
-This project is a resource page used in AI4SG class final project.
+## Pothole Detection Project
 
-## 1. Clone a package 
-Download the package into VS Code by running the following in VS Code terminal:
-```bash
-git clone https://github.com/unicode101/118i-tutorial.git
-```
 
 ## 2. Run the cloned project 
 First, please update your API key setting. Please follow the tutorial below to protect your API key. 
